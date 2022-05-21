@@ -1,0 +1,15 @@
+#wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+#wrapper svg {
+    border: 1px solid;
+}
+
+.controls {
+    position: absolute;
+    top: 25%;
+    right: 200px;
+    user-select: none;
+}
