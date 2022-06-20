@@ -10,6 +10,7 @@ class Game {
   figures;
   position;
   isGameOver;
+  isPaused;
 
   start = () => {
     this.figures = [];
@@ -21,14 +22,18 @@ class Game {
     this._createGameLoop();
 
     const rotateBtnElement = document.getElementById('btn-rotate');
-    const stopBtnElement = document.getElementById('btn-stop');
+    const pauseResumeBtnElement = document.getElementById('btn-pause_resume');
 
     rotateBtnElement.addEventListener('click', () => {
       console.log('ROTATE');
     });
 
-    stopBtnElement.addEventListener('click', () => {
-        this.isGameOver = !this.isGameOver;
+    pauseResumeBtnElement.addEventListener('click', async () => {
+        if (this.isPaused) {
+          this.resume();
+        } else {
+          this.pause();
+        }
     });
   };
 
@@ -117,8 +122,15 @@ class Game {
 
   _createGameLoop = () => {
     let start = null;
-    const gameLoop = (timestamp) => {
-      if (this.isGameOver) return;
+    const gameLoop = async (timestamp) => {
+      if (this.isGameOver) {
+        return;
+      };
+
+      if (this.isPaused) {
+        start = null;
+      }
+
       if (start === null) start = timestamp;
       let progress = timestamp - start;
 
@@ -131,6 +143,14 @@ class Game {
 
     requestAnimationFrame(gameLoop);
   };
+
+  pause = async () => {
+    this.isPaused = true;
+  }
+
+  resume = () => {
+    this.isPaused = false;
+  }
 }
 
 new Game().start();
