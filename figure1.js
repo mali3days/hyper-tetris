@@ -6,13 +6,17 @@
 
 import { STEP } from './index.js';
 
-export function figure1({ size, position }) {
-  return {
-    size: {
+export class Figure1 {
+  constructor(size, position) {
+    this.size = size;
+    this.position = position;
+
+    this.totalSize = {
       x: size * 2,
       y: size * 2,
-    },
-    elements: [
+    };
+
+    this.elements = [
       {
         x: position.x,
         y: position.y,
@@ -25,32 +29,33 @@ export function figure1({ size, position }) {
         x: position.x + STEP,
         y: position.y + STEP,
       },
-    ],
-    element: `
-        <g class="f1" transform="translate(${position.x}, ${position.y})">
-            <rect
-                width="${size}"
-                height="${size}"
-            />
+    ];
+  }
 
-            <rect
-                width="${size}"
-                height="${size}"
-                x="${STEP}"
-            />
-            <rect
-                width="${size}"
-                height="${size}"
-                x="${STEP}"
-                y="${STEP}"
-            />
-        </g>`,
-  };
-}
-{
-  /* <rect
-width="${size}"
-height="${size}"
-y="20"
-/> */
+  rotate() {
+    console.log('ROTATE FIG 1');
+    console.log(this);
+  }
+
+  get element() {
+    return `
+      <g class="f1" transform="translate(${this.position.x}, ${this.position.y})">
+          <rect
+              width="${this.size}"
+              height="${this.size}"
+          />
+
+          <rect
+              width="${this.size}"
+              height="${this.size}"
+              x="${STEP}"
+          />
+          <rect
+              width="${this.size}"
+              height="${this.size}"
+              x="${STEP}"
+              y="${STEP}"
+          />
+      </g>`;
+  }
 }

@@ -1,4 +1,4 @@
-import { figure1 } from './figure1.js';
+import { Figure1 } from './figure1.js';
 
 const RENDER_TIME = 1000;
 export const STEP = 20;
@@ -25,7 +25,7 @@ class Game {
     const pauseResumeBtnElement = document.getElementById('btn-pause_resume');
 
     rotateBtnElement.addEventListener('click', () => {
-      console.log('ROTATE');
+      this.figure.rotate();
     });
 
     pauseResumeBtnElement.addEventListener('click', async () => {
@@ -40,7 +40,6 @@ class Game {
   update = () => {
     console.log('update');
 
-    console.log(this.figure);
     this._setFigure();
     this._updateFigurePosition();
     this._renderGame();
@@ -70,19 +69,19 @@ class Game {
   };
 
   _validatePosition = (position) => {
-    console.log('validate');
-    console.log(this.position.x);
-    console.log(this.position.x + this.figure.size.x);
+    // console.log('validate');
+    // console.log(this.position.x);
+    // console.log(this.position.x + this.figure.totalSize.x);
 
     if (
       this.figures.find((figure) => {
-        console.log('figure.elements: ', figure.elements[0]?.x);
-        console.log('this.position.x: ', this.position.x);
-        console.log('this.position.y: ', this.position.y);
+        // console.log('figure.elements: ', figure.elements[0]?.x);
+        // console.log('this.position.x: ', this.position.x);
+        // console.log('this.position.y: ', this.position.y);
         return figure.elements.some((element) => {
           return (
-            element.x === this.position.x + this.figure.size.x ||
-            element.y === this.position.y + this.figure.size.y
+            element.x === this.position.x + this.figure.totalSize.x ||
+            element.y === this.position.y + this.figure.totalSize.y
           );
         });
       })
@@ -94,7 +93,7 @@ class Game {
       return false;
     }
 
-    if (this.position.x + this.figure.size.x === GAME_SIZE_W) {
+    if (this.position.x + this.figure.totalSize.x === GAME_SIZE_W) {
       return false;
     }
 
@@ -102,7 +101,7 @@ class Game {
   };
 
   _setFigure = () => {
-    this.figure = figure1({ size: STEP, position: this.position });
+    this.figure = new Figure1(STEP, this.position);
   };
 
   _renderGame = () => {
