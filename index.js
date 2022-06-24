@@ -52,12 +52,18 @@ class Game {
     // this.figure.position.
     this.figures.push(this.figure);
     this._setPosition();
+    this._resetFigure();
     console.log('stop');
   }
 
   _setPosition = () => {
     this.position = { x: 0, y: 0 };
   };
+
+  _resetFigure = () => {
+    // TODO: WIP!
+    this.element = null;
+  }
 
   _updateFigurePosition = () => {
     const isValid = this._validatePosition();
@@ -101,11 +107,14 @@ class Game {
   };
 
   _setFigure = () => {
-    this.figure = new Figure1(STEP, this.position);
+    this.figure = new Figure1(STEP, this.position, this.element);
+    this.element = this.figure.element;
   };
 
   _renderGame = () => {
     const element = document.getElementById('wrapper');
+
+    console.log('element: ', this.figure.element);
 
     element.innerHTML = `
         <svg
@@ -113,8 +122,8 @@ class Game {
             height="${GAME_SIZE_H}"
             xmlns="http://www.w3.org/2000/svg"
         >
-            ${this.figure.element}
-            ${this.figures.map((figure) => figure.element)}
+            ${this.figure.render()}
+            ${this.figures.map((figure) => figure.render())}
         </svg>
       `;
   };
