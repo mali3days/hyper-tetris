@@ -14,12 +14,12 @@ const defaultElement = [
   [0, 1],
 ];
 
-export class Figure1 { // extends Figure
+export class Figure1 extends Figure { // 
   constructor(size, position, element) {
-    // super();
+    super();
     this.size = size;
     this.position = position;
-    this.element = element || defaultElement;
+    this.element = defaultElement; // element || defaultElement
 
     this.totalSize = {
       x: size * 2,
@@ -43,11 +43,8 @@ export class Figure1 { // extends Figure
   }
 
   rotate() {
-    console.log('ROTATE FIG 1');
-    // console.log(this);
 
-    this.element = rotateMatrix(this.element);
-    console.log(this.element);
+    rotateMatrix(this.element);
   }
 
   render() {

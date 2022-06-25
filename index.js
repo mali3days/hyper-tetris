@@ -25,6 +25,8 @@ class Game {
     const pauseResumeBtnElement = document.getElementById('btn-pause_resume');
 
     rotateBtnElement.addEventListener('click', () => {
+      console.log('ROTATE CLICKED');
+      console.log(this.figure);
       this.figure.rotate();
     });
 
@@ -41,6 +43,7 @@ class Game {
     console.log('update');
 
     this._setFigure();
+    // TODO: make renderFigure, instead of _setFigure() for every update
     this._updateFigurePosition();
     this._renderGame();
   };
@@ -61,7 +64,7 @@ class Game {
   };
 
   _resetFigure = () => {
-    // TODO: WIP!
+    // TODO: WIP! Delete?!
     this.element = null;
   }
 
@@ -107,8 +110,7 @@ class Game {
   };
 
   _setFigure = () => {
-    this.figure = new Figure1(STEP, this.position, this.element);
-    this.element = this.figure.element;
+    this.figure = new Figure1(STEP, this.position);
   };
 
   _renderGame = () => {
