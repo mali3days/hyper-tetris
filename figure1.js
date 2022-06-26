@@ -6,7 +6,7 @@ import { renderMatrix } from './renderMatrix.js';
  *
  * [1, 1]
  * [0, 1]
- * 
+ *
  */
 
 const defaultElement = [
@@ -14,7 +14,7 @@ const defaultElement = [
   [0, 1],
 ];
 
-export class Figure1 extends Figure { // 
+export class Figure1 extends Figure {
   constructor(size, position, element) {
     super();
     this.size = size;
@@ -43,13 +43,14 @@ export class Figure1 extends Figure { //
   }
 
   rotate() {
-
     rotateMatrix(this.element);
   }
 
   render() {
     return `
-    <g class="f1" transform="translate(${this.position.x}, ${this.position.y})">
+    <g id="${this.id} "class="f1" transform="translate(${this.position.x}, ${
+      this.position.y
+    })">
         ${renderMatrix(this.element, this.size)}
     </g>`;
   }

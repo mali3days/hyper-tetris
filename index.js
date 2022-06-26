@@ -17,7 +17,7 @@ class Game {
     this.isGameOver = false;
     console.log('start');
 
-    this._setPosition();
+    this._resetPosition();
     // this._renderGame();
     this._createGameLoop();
 
@@ -42,34 +42,30 @@ class Game {
   update = () => {
     console.log('update');
 
-    this._setFigure();
-    // TODO: make renderFigure, instead of _setFigure() for every update
+    if (!this.figure) this._setFigure();
+
     this._updateFigurePosition();
     this._renderGame();
   };
 
   stop() {
     // this.isGameOver = true;
-    // this._setPosition();
+    // this._resetPosition();
+    console.log('STOP');
+    console.log('Create new figure');
     console.log(this.figure);
-    // this.figure.position.
     this.figures.push(this.figure);
-    this._setPosition();
-    this._resetFigure();
-    console.log('stop');
+    this._resetPosition();
+    this._setFigure();
   }
 
-  _setPosition = () => {
+  _resetPosition = () => {
     this.position = { x: 0, y: 0 };
   };
 
-  _resetFigure = () => {
-    // TODO: WIP! Delete?!
-    this.element = null;
-  }
-
   _updateFigurePosition = () => {
     const isValid = this._validatePosition();
+
     if (!isValid) {
       return this.stop();
     }
@@ -81,16 +77,17 @@ class Game {
     // console.log('validate');
     // console.log(this.position.x);
     // console.log(this.position.x + this.figure.totalSize.x);
+    // console.log('this.figures[0]: ', this.figures[0]);
 
     if (
       this.figures.find((figure) => {
-        // console.log('figure.elements: ', figure.elements[0]?.x);
+        // console.log('figure.elements[0].x: ', figure.elements[0]?.x);
         // console.log('this.position.x: ', this.position.x);
         // console.log('this.position.y: ', this.position.y);
         return figure.elements.some((element) => {
           return (
-            element.x === this.position.x + this.figure.totalSize.x ||
-            element.y === this.position.y + this.figure.totalSize.y
+            element.x + figure.position.x === this.position.x + this.figure.totalSize.x ||
+            element.y + figure.position.y === this.position.y + this.figure.totalSize.y
           );
         });
       })
@@ -102,9 +99,15 @@ class Game {
       return false;
     }
 
+    // width collision
     if (this.position.x + this.figure.totalSize.x === GAME_SIZE_W) {
       return false;
     }
+
+    // height collision
+    // if (this.position.y + this.figure.totalSize.y === GAME_SIZE_H) {
+    //   return false;
+    // }
 
     return true;
   };
@@ -115,8 +118,6 @@ class Game {
 
   _renderGame = () => {
     const element = document.getElementById('wrapper');
-
-    console.log('element: ', this.figure.element);
 
     element.innerHTML = `
         <svg
