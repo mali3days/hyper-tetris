@@ -19,7 +19,7 @@ export class Figure1 extends Figure {
     super();
     this.size = size;
     this.position = position;
-    this.element = defaultElement; // element || defaultElement
+    this.element = JSON.parse(JSON.stringify(defaultElement)); // element || defaultElement
 
     this.totalSize = {
       x: size * 2,
@@ -42,9 +42,9 @@ export class Figure1 extends Figure {
     ];
   }
 
-  rotate() {
-    rotateMatrix(this.element);
-  }
+  rotate = () => {
+    this.element = rotateMatrix(this.element);
+  };
 
   render() {
     return `

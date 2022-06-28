@@ -8,7 +8,7 @@ export class Figure {
 
   setId() {
     this.id = generateId.next().value;
-  }  
+  }
 
   // render(element) {
   //   console.log(element);
