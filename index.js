@@ -55,6 +55,9 @@ class Game {
     console.log('Create new figure');
     console.log(this.figure);
     this.figures.push(this.figure);
+    // TODO: Implement storing rectangles to the board canvas
+    // as we need to strike a line if it is empty
+    // TIP: remember about border of the figure
     this._resetPosition();
     this._setFigure();
   }
