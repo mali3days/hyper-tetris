@@ -12,6 +12,4 @@ export function renderMatrix(matrix, size) {
     }, '');
     return result;
   }, '');
-
-  return result;
 }

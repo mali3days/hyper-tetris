@@ -1,6 +1,7 @@
 import { Figure } from './Figure.js';
 import { rotateMatrix } from './rotateMatrix.js';
 import { renderMatrix } from './renderMatrix.js';
+import { calculateElements } from './calculateElements.js';
 
 /**
  *
@@ -26,24 +27,12 @@ export class Figure1 extends Figure {
       y: size * 2,
     };
 
-    this.elements = [
-      {
-        x: position.x,
-        y: position.y,
-      },
-      {
-        x: position.x + this.size,
-        y: position.y,
-      },
-      {
-        x: position.x + this.size,
-        y: position.y + this.size,
-      },
-    ];
+    this.elements = calculateElements(this.element, this.size);
   }
 
   rotate = () => {
     this.element = rotateMatrix(this.element);
+    this.elements = calculateElements(this.element, this.size);
   };
 
   render() {
