@@ -3,7 +3,8 @@ import { Figure1 } from './figure1.js';
 const RENDER_TIME = 1000;
 export const STEP = 20;
 const GAME_SIZE_W = 15 * STEP; // 300
-const GAME_SIZE_H = 30 * STEP; // 600
+// const GAME_SIZE_H = 30 * STEP; // 600
+const GAME_SIZE_H = 10 * STEP; // 600
 
 class Game {
   figure;
@@ -48,33 +49,34 @@ class Game {
   };
 
   _updateFigurePosition = (position) => {
-    const isValid = this._validatePosition();
+    const isValid = this._validatePosition(position);
 
     if (!isValid) {
       return this.stop();
     }
 
     if (position) {
-
-      if ((this.position.x + position.x + STEP) === GAME_SIZE_W) return;
-      if ((this.position.x + position.x) < 0) return;
+      if (this.position.x + position.x + STEP === GAME_SIZE_W) return;
+      if (this.position.x + position.x < 0) return;
 
       if (position.x) this.position.x += position.x;
       if (position.y) this.position.y += position.y;
     }
   };
 
-  _validatePosition = (position) => {
+  _validatePosition = (position = {}) => {
+    const { x = 0, y = 0 } = position;
+
     if (
       this.figures.find((figure) => {
         return figure.elements.some((element) => {
           return this.figure.elements.some((figureElement) => {
             const figureElementXWeWant =
-              this.figure.position.x + this.figure.size + figureElement.x;
-            const elementXWeHave = figure.position.x + element.x;
-
+              this.figure.position.x + figureElement.x + x;
             const figureElementYWeWant =
-              this.figure.position.y + figureElement.y;
+              this.figure.position.y + figureElement.y + y;
+
+            const elementXWeHave = figure.position.x + element.x;
             const elementYWeHave = figure.position.y + element.y;
 
             if (
@@ -115,7 +117,7 @@ class Game {
   rotate = () => {
     this.figure.rotate();
     this.update();
-  }
+  };
 
   _renderGame = () => {
     const element = document.getElementById('wrapper');
@@ -136,6 +138,14 @@ class Game {
     let start = null;
     const gameLoop = async (timestamp) => {
       if (this.isGameOver) {
+        const shouldRestart = window.confirm('GAME OVER. Try again?');
+
+        if (shouldRestart) {
+          // TODO: restart logic
+        } else {
+          // TODO: show dead game?!
+        }
+
         return;
       }
 
@@ -181,7 +191,7 @@ class Game {
       // this.kill();
       // new Game().start();
     });
-    
+
     pauseResumeBtnElement.addEventListener('click', async () => {
       if (this.isPaused) {
         this.resume();
@@ -194,19 +204,19 @@ class Game {
       if (event.key === 'ArrowDown') {
         this.update({ y: STEP });
       }
-      
+
       if (event.key === 'ArrowUp') {
         this.rotate();
       }
-      
+
       if (event.key === 'ArrowRight') {
-        this.update({ x: STEP })
+        this.update({ x: STEP });
       }
-      
+
       if (event.key === 'ArrowLeft') {
-        this.update({ x: -STEP })
+        this.update({ x: -STEP });
       }
-    })
+    });
   };
 }
 
