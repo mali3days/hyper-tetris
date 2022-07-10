@@ -49,9 +49,10 @@ class Game {
   };
 
   _updateFigurePosition = (position) => {
-    const isValid = this._validatePosition(position);
+    const { isValid, skipMove } = this._validatePosition(position);
 
     if (!isValid) {
+      if (skipMove) return;
       return this.stop();
     }
 
@@ -65,36 +66,18 @@ class Game {
   };
 
   _validatePosition = (position = {}) => {
-    const { x = 0, y = 0 } = position;
+    let isValid = true;
+    let skipMove = false;
 
-    if (
-      this.figures.find((figure) => {
-        return figure.elements.some((element) => {
-          return this.figure.elements.some((figureElement) => {
-            const figureElementXWeWant =
-              this.figure.position.x + figureElement.x + x;
-            const figureElementYWeWant =
-              this.figure.position.y + figureElement.y + y;
-
-            const elementXWeHave = figure.position.x + element.x;
-            const elementYWeHave = figure.position.y + element.y;
-
-            if (
-              figureElementXWeWant === elementXWeHave &&
-              figureElementYWeWant === elementYWeHave
-            )
-              return true;
-
-            return false;
-          });
-        });
-      })
-    ) {
-      if (this.position.x === 0) {
+    if (this._elementsIntersect(position)) {
+      if (position.x !== 0 && !position.y) {
+        isValid = false;
+        skipMove = true;
+      } else if (this.position.x === 0 && this.position.y === 0) {
         this.isGameOver = true;
+      } else {
+        isValid = false;
       }
-
-      return false;
     }
 
     // width collision
@@ -104,10 +87,10 @@ class Game {
 
     // height collision
     if (this.position.y + this.figure.totalSize.y === GAME_SIZE_H) {
-      return false;
+      isValid = false;
     }
 
-    return true;
+    return { isValid, skipMove };
   };
 
   _setFigure = () => {
@@ -115,6 +98,7 @@ class Game {
   };
 
   rotate = () => {
+    // TODO: do _validatePosition before this.figure.rotate(); to check if it is possible
     this.figure.rotate();
     this.update();
   };
@@ -178,6 +162,32 @@ class Game {
   // kill = () => {
   //   document.getElementById('wrapper').innerHTML = '';
   // }
+
+  _elementsIntersect = (position) => {
+    const { x = 0, y = 0 } = position;
+
+    return this.figures.find((figure) => {
+      return figure.elements.some((element) => {
+        return this.figure.elements.some((figureElement) => {
+          const figureElementXWeWant =
+            this.figure.position.x + figureElement.x + x;
+          const figureElementYWeWant =
+            this.figure.position.y + figureElement.y + y;
+
+          const elementXWeHave = figure.position.x + element.x;
+          const elementYWeHave = figure.position.y + element.y;
+
+          if (
+            figureElementXWeWant === elementXWeHave &&
+            figureElementYWeWant === elementYWeHave
+          )
+            return true;
+
+          return false;
+        });
+      });
+    });
+  };
 
   _registerEventListeners = () => {
     const rotateBtnElement = document.getElementById('btn-rotate');
