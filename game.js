@@ -69,7 +69,7 @@ class Game {
     let isValid = true;
     let skipMove = false;
 
-    if (this._elementsIntersect(position)) {
+    if (this._elementsIntersect(position, this.figure)) {
       if (position.x !== 0 && !position.y) {
         isValid = false;
         skipMove = true;
@@ -163,16 +163,16 @@ class Game {
   //   document.getElementById('wrapper').innerHTML = '';
   // }
 
-  _elementsIntersect = (position) => {
+  _elementsIntersect = (position, figureToCheck) => {
     const { x = 0, y = 0 } = position;
 
     return this.figures.find((figure) => {
       return figure.elements.some((element) => {
-        return this.figure.elements.some((figureElement) => {
+        return figureToCheck.elements.some((figureElement) => {
           const figureElementXWeWant =
-            this.figure.position.x + figureElement.x + x;
+            figureToCheck.position.x + figureElement.x + x;
           const figureElementYWeWant =
-            this.figure.position.y + figureElement.y + y;
+            figureToCheck.position.y + figureElement.y + y;
 
           const elementXWeHave = figure.position.x + element.x;
           const elementYWeHave = figure.position.y + element.y;
