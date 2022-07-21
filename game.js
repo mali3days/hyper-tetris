@@ -49,7 +49,8 @@ class Game {
   };
 
   _updateFigurePosition = (position) => {
-    const { isValid, skipMove } = this._validatePosition(position);
+    console.log('this.figure: ', this.figure);
+    const { isValid, skipMove } = this._validatePosition(position, this.figure);
 
     if (!isValid) {
       if (skipMove) return;
@@ -65,11 +66,11 @@ class Game {
     }
   };
 
-  _validatePosition = (position = {}) => {
+  _validatePosition = (position = {}, figure) => {
     let isValid = true;
     let skipMove = false;
 
-    if (this._elementsIntersect(position, this.figure)) {
+    if (this._elementsIntersect(position, figure)) {
       if (position.x !== 0 && !position.y) {
         isValid = false;
         skipMove = true;
@@ -98,9 +99,26 @@ class Game {
   };
 
   rotate = () => {
+    const rotatedElem = this.figure.rotate();
+    const figureToCheck = {
+      ...this.figure,
+      element: rotatedElem,
+      elements: this.figure.calculateElements(),
+    };
+
+    console.log('figureToCheck: ', figureToCheck);
+
+    const { isValid } = this._validatePosition(this.position, figureToCheck);
+
     // TODO: do _validatePosition before this.figure.rotate(); to check if it is possible
-    this.figure.rotate();
-    this.update();
+    // TODO: fix and finish this logic
+    if (isValid) {
+      console.log('VALID ROTATE: ', rotatedElem);
+      this.figure.updateElement(rotatedElem);
+      this.update();
+    } else {
+      console.log('NON VALID ROTATE');
+    }
   };
 
   _renderGame = () => {
@@ -165,6 +183,8 @@ class Game {
 
   _elementsIntersect = (position, figureToCheck) => {
     const { x = 0, y = 0 } = position;
+
+    console.log('figureToCheck: ', figureToCheck);
 
     return this.figures.find((figure) => {
       return figure.elements.some((element) => {

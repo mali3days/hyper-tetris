@@ -30,9 +30,18 @@ export class Figure1 extends Figure {
     this.elements = calculateElements(this.element, this.size);
   }
 
+  // TODO: rename method?!
   rotate = () => {
-    this.element = rotateMatrix(this.element);
-    this.elements = calculateElements(this.element, this.size);
+    return rotateMatrix(JSON.parse(JSON.stringify(this.element)));
+  };
+
+  updateElement = (element) => {
+    this.element = element;
+    this.elements = this.calculateElements();
+  };
+
+  calculateElements = () => {
+    return calculateElements(this.element, this.size);
   };
 
   render() {
