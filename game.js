@@ -103,21 +103,18 @@ class Game {
     const figureToCheck = {
       ...this.figure,
       element: rotatedElem,
-      elements: this.figure.calculateElements(),
+      elements: this.figure.calculateElements(rotatedElem),
     };
 
-    console.log('figureToCheck: ', figureToCheck);
+    const { isValid } = this._validatePosition({}, figureToCheck);
 
-    const { isValid } = this._validatePosition(this.position, figureToCheck);
-
-    // TODO: do _validatePosition before this.figure.rotate(); to check if it is possible
-    // TODO: fix and finish this logic
     if (isValid) {
       console.log('VALID ROTATE: ', rotatedElem);
       this.figure.updateElement(rotatedElem);
       this.update();
     } else {
       console.log('NON VALID ROTATE');
+      this.pause(); // TODO: remove later!
     }
   };
 
@@ -181,6 +178,14 @@ class Game {
   //   document.getElementById('wrapper').innerHTML = '';
   // }
 
+  addDebugDot = (x, y) => {
+    document.getElementsByTagName('svg')[0].innerHTML += `
+      <g id="debug" style="fill: red" class="f1" transform="translate(${x}, ${y})">
+        <rect width="20" height="20" x="0" y="0"></rect>  
+      </g>
+    `;
+  };
+
   _elementsIntersect = (position, figureToCheck) => {
     const { x = 0, y = 0 } = position;
 
@@ -200,8 +205,12 @@ class Game {
           if (
             figureElementXWeWant === elementXWeHave &&
             figureElementYWeWant === elementYWeHave
-          )
+          ) {
+            // TODO: remove later
+            this.addDebugDot(figureElementXWeWant, figureElementYWeWant);
+
             return true;
+          }
 
           return false;
         });

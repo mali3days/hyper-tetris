@@ -40,8 +40,8 @@ export class Figure1 extends Figure {
     this.elements = this.calculateElements();
   };
 
-  calculateElements = () => {
-    return calculateElements(this.element, this.size);
+  calculateElements = (element = this.element) => {
+    return calculateElements(element, this.size);
   };
 
   render() {

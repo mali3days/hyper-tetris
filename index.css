@@ -5,6 +5,7 @@
 
 #wrapper svg {
     border: 1px solid;
+    position: relative;
 }
 
 .controls {
