@@ -87,7 +87,10 @@ class Game {
     // }
 
     // height collision
-    if (this.position.y + this.figure.totalSize.y === GAME_SIZE_H) {
+    if (
+      position.y > 0 &&
+      this.position.y + this.figure.totalSize.y === GAME_SIZE_H
+    ) {
       isValid = false;
     }
 
@@ -114,7 +117,7 @@ class Game {
       this.update();
     } else {
       console.log('NON VALID ROTATE');
-      this.pause(); // TODO: remove later!
+      // this.pause(); // TODO: remove later!
     }
   };
 
