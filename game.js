@@ -37,7 +37,7 @@ class Game {
     console.log('Create new figure');
     console.log(this.figure);
     this.figures.push(this.figure);
-    this.checkLines(this.figures);
+    this.checkCompletedLines(this.figures);
     // TODO: Implement storing rectangles to the board canvas
     // as we need to strike a line if it is empty
     // TIP: remember about border of the figure
@@ -45,7 +45,7 @@ class Game {
     this._setFigure();
   }
 
-  checkLines = (figures) => {
+  checkCompletedLines = (figures) => {
     // TODO: check if some line is finished
     console.log('checkLines: ', figures);
   }
