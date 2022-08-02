@@ -10,6 +10,14 @@ export class Figure {
     this.id = generateId.next().value;
   }
 
+  getMaxY() {
+    return Math.max(...this.elements.map((element) => element.y));
+  }
+
+  getMinX() {
+    return Math.min(...this.elements.map((element) => element.x));
+  }
+  
   // render(element) {
   //   console.log(element);
   //   return `

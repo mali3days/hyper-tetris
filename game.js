@@ -1,4 +1,5 @@
 import { Figure1 } from './figure1.js';
+import { Figure2 } from './figure2.js';
 
 const RENDER_TIME = 1000;
 export const STEP = 20;
@@ -48,14 +49,13 @@ class Game {
   checkCompletedLines = (figures) => {
     // TODO: check if some line is finished
     console.log('checkLines: ', figures);
-  }
+  };
 
   _resetPosition = () => {
     this.position = { x: 0, y: 0 };
   };
 
   _updateFigurePosition = (position) => {
-    console.log('this.figure: ', this.figure);
     const { isValid, skipMove } = this._validatePosition(position, this.figure);
 
     if (!isValid) {
@@ -65,7 +65,7 @@ class Game {
 
     if (position) {
       if (this.position.x + position.x + STEP === GAME_SIZE_W) return;
-      if (this.position.x + position.x < 0) return;
+      if (this.position.x + position.x < 0) return; // TODO: use or delete this.figure.getMinX() + position.x < 0
 
       if (position.x) this.position.x += position.x;
       if (position.y) this.position.y += position.y;
@@ -93,10 +93,8 @@ class Game {
     // }
 
     // height collision
-    if (
-      position.y > 0 &&
-      this.position.y + this.figure.totalSize.y === GAME_SIZE_H
-    ) {
+    const maxYposition = this.position.y + this.figure.getMaxY() + this.figure.size;
+    if (position.y > 0 && maxYposition === GAME_SIZE_H) {
       isValid = false;
     }
 
@@ -104,7 +102,8 @@ class Game {
   };
 
   _setFigure = () => {
-    this.figure = new Figure1(STEP, this.position);
+    // this.figure = new Figure1(STEP, this.position);
+    this.figure = new Figure2(STEP, this.position);
   };
 
   rotate = () => {
