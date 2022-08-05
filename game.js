@@ -88,8 +88,7 @@ class Game {
     }
 
     // width collision
-    // TODO: WIP!
-    const maxXposition = this.position.x + this.figure.getMaxX() + this.figure.size;
+    const maxXposition = this.position.x + figure.getMaxX() + this.figure.size;
     const widthCollision1 = position.x > 0 && maxXposition === GAME_SIZE_W;
     const widthCollision2 = maxXposition > GAME_SIZE_W;
     if (widthCollision1 || widthCollision2) {
@@ -98,8 +97,10 @@ class Game {
     }
 
     // height collision
-    const maxYposition = this.position.y + this.figure.getMaxY() + this.figure.size;
-    if (position.y > 0 && maxYposition === GAME_SIZE_H) {
+    const maxYposition = this.position.y + figure.getMaxY() + this.figure.size;
+    const heightCollision1 = position.y > 0 && maxYposition === GAME_SIZE_H;
+    const heightCollision2 = maxYposition > GAME_SIZE_H;
+    if (heightCollision1 || heightCollision2) {
       isValid = false;
     }
 
@@ -107,6 +108,7 @@ class Game {
   };
 
   _setFigure = () => {
+    // TODO: add randomizer
     // this.figure = new Figure1(STEP, this.position);
     this.figure = new Figure2(STEP, this.position);
   };
@@ -117,6 +119,7 @@ class Game {
       ...this.figure,
       element: rotatedElem,
       elements: this.figure.calculateElements(rotatedElem),
+      __proto__: this.figure.__proto__,
     };
 
     const { isValid } = this._validatePosition({}, figureToCheck);
