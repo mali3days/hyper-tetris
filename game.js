@@ -88,9 +88,14 @@ class Game {
     }
 
     // width collision
-    // if (this.position.x + this.figure.totalSize.x === GAME_SIZE_W) {
-    //   return false;
-    // }
+    // TODO: WIP!
+    const maxXposition = this.position.x + this.figure.getMaxX() + this.figure.size;
+    const widthCollision1 = position.x > 0 && maxXposition === GAME_SIZE_W;
+    const widthCollision2 = maxXposition > GAME_SIZE_W;
+    if (widthCollision1 || widthCollision2) {
+      isValid = false;
+      skipMove = true;
+    }
 
     // height collision
     const maxYposition = this.position.y + this.figure.getMaxY() + this.figure.size;

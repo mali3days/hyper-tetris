@@ -14,6 +14,10 @@ export class Figure {
     return Math.max(...this.elements.map((element) => element.y));
   }
 
+  getMaxX() {
+    return Math.max(...this.elements.map((element) => element.x));
+  }
+
   getMinX() {
     return Math.min(...this.elements.map((element) => element.x));
   }
