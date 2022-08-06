@@ -1,5 +1,4 @@
-import { Figure1 } from './figure1.js';
-import { Figure2 } from './figure2.js';
+import { FigureManager } from './FigureManager.js';
 
 const RENDER_TIME = 1000;
 export const STEP = 20;
@@ -13,6 +12,10 @@ class Game {
   position;
   isGameOver;
   isPaused;
+
+  constructor(figureManager) {
+    this.figureManager = figureManager;
+  }
 
   start = () => {
     console.log('start');
@@ -108,9 +111,7 @@ class Game {
   };
 
   _setFigure = () => {
-    // TODO: add randomizer
-    // this.figure = new Figure1(STEP, this.position);
-    this.figure = new Figure2(STEP, this.position);
+    this.figure = this.figureManager.create(STEP, this.position);
   };
 
   rotate = () => {
@@ -275,4 +276,4 @@ class Game {
   };
 }
 
-new Game().start();
+new Game(new FigureManager()).start();
