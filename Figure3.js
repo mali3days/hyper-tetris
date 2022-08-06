@@ -44,7 +44,7 @@ export class Figure3 extends Figure {
 
   render() {
     return `
-    <g id="${this.id} "class="f3" transform="translate(${this.position.x}, ${
+    <g id="${this.id} "class="f f3" transform="translate(${this.position.x}, ${
       this.position.y
     })">
         ${renderMatrix(this.element, this.size)}

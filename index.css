@@ -18,3 +18,19 @@
     height: 100px;
     user-select: none;
 }
+
+/* .f rect {
+    
+} */
+
+.f1 rect {
+    fill: red;
+}
+
+.f2 rect {
+    fill: green;
+}
+
+.f3 rect {
+    fill: orange;
+}

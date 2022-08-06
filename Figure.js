@@ -10,6 +10,11 @@ export class Figure {
     this.id = generateId.next().value;
   }
 
+  updatePosition(position) {
+    this.position = position;
+    return this;
+  }
+
   getMaxY() {
     return Math.max(...this.elements.map((element) => element.y));
   }

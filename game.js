@@ -2,9 +2,9 @@ import { FigureManager } from './FigureManager.js';
 
 const RENDER_TIME = 1000;
 export const STEP = 20;
-const GAME_SIZE_W = 15 * STEP; // 300
+const GAME_SIZE_W = 10 * STEP; // 300
 // const GAME_SIZE_H = 30 * STEP; // 600
-const GAME_SIZE_H = 10 * STEP; // 600
+const GAME_SIZE_H = 20 * STEP; // 600
 
 class Game {
   figure;
@@ -67,8 +67,7 @@ class Game {
     }
 
     if (position) {
-      if (this.position.x + position.x + STEP === GAME_SIZE_W) return;
-      if (this.position.x + position.x < 0) return; // TODO: use or delete this.figure.getMinX() + position.x < 0
+      if (this.position.x + position.x < 0) return;
 
       if (position.x) this.position.x += position.x;
       if (position.y) this.position.y += position.y;
@@ -111,7 +110,7 @@ class Game {
   };
 
   _setFigure = () => {
-    this.figure = this.figureManager.create(STEP, this.position);
+    this.figure = this.figureManager.create(this.position);
   };
 
   rotate = () => {
@@ -136,9 +135,9 @@ class Game {
   };
 
   _renderGame = () => {
-    const element = document.getElementById('wrapper');
+    const boardElement = document.getElementById('board');
 
-    element.innerHTML = `
+    boardElement.innerHTML = `
         <svg
             width="${GAME_SIZE_W}"
             height="${GAME_SIZE_H}"
