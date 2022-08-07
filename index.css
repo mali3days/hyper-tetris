@@ -23,14 +23,14 @@
     
 } */
 
-.f1 rect {
+.f1 rect, .f1 {
     fill: red;
 }
 
-.f2 rect {
+.f2 rect, .f2 {
     fill: green;
 }
 
-.f3 rect {
+.f3 rect, .f3 {
     fill: orange;
 }

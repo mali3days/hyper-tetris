@@ -41,7 +41,7 @@ class Game {
     console.log('Create new figure');
     console.log(this.figure);
     this.figures.push(this.figure);
-    this.checkCompletedLines(this.figures);
+    this.checkCompletedLines(this.figure);
     // TODO: Implement storing rectangles to the board canvas
     // as we need to strike a line if it is empty
     // TIP: remember about border of the figure
@@ -49,9 +49,20 @@ class Game {
     this._setFigure();
   }
 
-  checkCompletedLines = (figures) => {
-    // TODO: check if some line is finished
-    console.log('checkLines: ', figures);
+  checkCompletedLines = (figure) => {
+    setTimeout(() => {
+      // TODO: check if some line is finished
+      console.log('figure: ', figure);
+      console.log('figures: ', this.figures);
+      // getCTM()
+
+      const elemtnsInLine = document.querySelectorAll("[data-y='380']");
+      console.log('elemtnsInLine: ', elemtnsInLine);
+
+      if (elemtnsInLine.length === 10) {
+        alert('KILL LAST LINE!');
+      }
+    });
   };
 
   _resetPosition = () => {
@@ -125,7 +136,6 @@ class Game {
     const { isValid } = this._validatePosition({}, figureToCheck);
 
     if (isValid) {
-      console.log('VALID ROTATE: ', rotatedElem);
       this.figure.updateElement(rotatedElem);
       this.update();
     } else {
@@ -144,7 +154,7 @@ class Game {
             xmlns="http://www.w3.org/2000/svg"
         >
             ${this.figure.render()}
-            ${this.figures.map((figure) => figure.render())}
+            ${this.figures.map((figure) => figure.render(true))}
         </svg>
       `;
   };
@@ -205,8 +215,6 @@ class Game {
   _elementsIntersect = (position, figureToCheck) => {
     const { x = 0, y = 0 } = position;
 
-    console.log('figureToCheck: ', figureToCheck);
-
     return this.figures.find((figure) => {
       return figure.elements.some((element) => {
         return figureToCheck.elements.some((figureElement) => {
@@ -233,6 +241,10 @@ class Game {
       });
     });
   };
+
+  elementFromPoint(x, y) {
+    const coordToCheck = { x: 0, y: 380 };
+  }
 
   _registerEventListeners = () => {
     const rotateBtnElement = document.getElementById('btn-rotate');

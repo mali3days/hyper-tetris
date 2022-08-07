@@ -1,7 +1,6 @@
 import { Figure } from './Figure.js';
 import { rotateMatrix } from './rotateMatrix.js';
-import { renderMatrix } from './renderMatrix.js';
-import { calculateElements } from './calculateElements.js';
+import { calculateElements } from './utils.js';
 
 /**
  *
@@ -30,7 +29,6 @@ export class Figure1 extends Figure {
     this.elements = calculateElements(this.element, this.size);
   }
 
-  // TODO: rename method?!
   rotate = () => {
     return rotateMatrix(JSON.parse(JSON.stringify(this.element)));
   };
@@ -44,12 +42,7 @@ export class Figure1 extends Figure {
     return calculateElements(element, this.size);
   };
 
-  render() {
-    return `
-    <g id="${this.id} "class="f f1" transform="translate(${this.position.x}, ${
-      this.position.y
-    })">
-        ${renderMatrix(this.element, this.size)}
-    </g>`;
+  render(noWrap) {
+    return super.render(noWrap, 'f f1');
   }
 }

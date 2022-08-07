@@ -1,5 +1,5 @@
 import { renderMatrix } from './renderMatrix.js';
-import { generateId } from './generateId.js';
+import { generateId } from './utils.js';
 
 export class Figure {
   constructor() {
@@ -26,12 +26,25 @@ export class Figure {
   getMinX() {
     return Math.min(...this.elements.map((element) => element.x));
   }
-  
-  // render(element) {
-  //   console.log(element);
-  //   return `
-  //   <g class="f1" transform="translate(${this.position.x}, ${this.position.y})">
-  //       ${renderMatrix(element, this.size)}
-  //   </g>`;
-  // }
+
+  render(noWrap, className) {
+    if (noWrap) {
+      return `${renderMatrix(
+        this.element,
+        this.size,
+        {
+          x: this.position.x,
+          y: this.position.y,
+        },
+        className
+      )}`;
+    }
+
+    return `
+    <g id="${this.id}" class="${className}" data-y=${this.position.y} transform="translate(${
+      this.position.x
+    }, ${this.position.y})">
+        ${renderMatrix(this.element, this.size)}
+    </g>`;
+  }
 }
