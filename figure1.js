@@ -22,8 +22,8 @@ export class Figure1 extends Figure {
     this.element = JSON.parse(JSON.stringify(defaultElement)); // element || defaultElement
 
     this.totalSize = {
-      x: size * 2,
-      y: size * 2,
+      x: size * this.element[0].length,
+      y: size * this.element.length,
     };
 
     this.elements = calculateElements(this.element, this.size);
@@ -36,6 +36,7 @@ export class Figure1 extends Figure {
   updateElement = (element) => {
     this.element = element;
     this.elements = this.calculateElements();
+    super.updateTotalSize();
   };
 
   calculateElements = (element = this.element) => {

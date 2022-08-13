@@ -54,13 +54,21 @@ class Game {
       // TODO: check if some line is finished
       console.log('figure: ', figure);
       console.log('figures: ', this.figures);
+      console.log('figures: ', this.size);
       // getCTM()
 
-      const elemtnsInLine = document.querySelectorAll("[data-y='380']");
-      console.log('elemtnsInLine: ', elemtnsInLine);
+      const { position, totalSize } = figure;
 
-      if (elemtnsInLine.length === 10) {
-        alert('KILL LAST LINE!');
+      for (let i = position.y; i < position.y + totalSize.y; i+= figure.size) {
+        const elemtnsInLine = document.querySelectorAll(`[data-y='${i}']`);
+        console.log('elemtnsInLine: ', elemtnsInLine);
+        console.log('i: ', i);
+        console.log('position.y: ', position.y);
+        console.log('position.y + totalSize.y: ', position.y + totalSize.y);
+
+        if (elemtnsInLine.length === 10) {
+          alert('KILL LAST LINE!');
+        }
       }
     });
   };

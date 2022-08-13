@@ -27,6 +27,13 @@ export class Figure {
     return Math.min(...this.elements.map((element) => element.x));
   }
 
+  updateTotalSize() {
+    this.totalSize = {
+      x: this.size * this.element[0].length,
+      y: this.size * this.element.length,
+    };
+  }
+
   render(noWrap, className) {
     if (noWrap) {
       return `${renderMatrix(
