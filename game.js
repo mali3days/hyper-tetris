@@ -2,9 +2,10 @@ import { FigureManager } from './FigureManager.js';
 
 const RENDER_TIME = 1000;
 export const STEP = 20;
-const GAME_SIZE_W = 10 * STEP; // 300
-// const GAME_SIZE_H = 30 * STEP; // 600
-const GAME_SIZE_H = 20 * STEP; // 600
+const GAME_SIZE_W = 10;
+const GAME_SIZE_H = 20;
+const GAME_SIZE_W_PX = GAME_SIZE_W * STEP;
+const GAME_SIZE_H_PX = GAME_SIZE_H * STEP;
 
 class Game {
   figure;
@@ -41,7 +42,7 @@ class Game {
     console.log('Create new figure');
     console.log(this.figure);
     this.figures.push(this.figure);
-    this.checkCompletedLines(this.figure);
+    this.deleteCompletedLines(this.figure);
     // TODO: Implement storing rectangles to the board canvas
     // as we need to strike a line if it is empty
     // TIP: remember about border of the figure
@@ -49,7 +50,7 @@ class Game {
     this._setFigure();
   }
 
-  checkCompletedLines = (figure) => {
+  deleteCompletedLines = (figure) => {
     setTimeout(() => {
       // TODO: check if some line is finished
       console.log('figure: ', figure);
@@ -59,16 +60,21 @@ class Game {
 
       const { position, totalSize } = figure;
 
-      for (let i = position.y; i < position.y + totalSize.y; i+= figure.size) {
-        const elemtnsInLine = document.querySelectorAll(`[data-y='${i}']`);
-        console.log('elemtnsInLine: ', elemtnsInLine);
-        console.log('i: ', i);
-        console.log('position.y: ', position.y);
-        console.log('position.y + totalSize.y: ', position.y + totalSize.y);
+      const completedLines = [];
+      let elemtnsInLine;
+      for (let i = position.y; i < position.y + totalSize.y; i += figure.size) {
+        elemtnsInLine = document.querySelectorAll(`[data-y='${i}']`);
 
-        if (elemtnsInLine.length === 10) {
-          alert('KILL LAST LINE!');
+        if (elemtnsInLine.length === GAME_SIZE_W) {
+          completedLines.push(i);
         }
+      }
+
+      if (completedLines.length > 0) {
+        // alert('DELETE ' + completedLines.join(', ') + ' LINE(S)');
+        // TODO: delete completed lines
+        const svgContainer = document.getElementsByTagName('svg')[0];
+        elemtnsInLine.forEach((el) => svgContainer.removeChild(el));
       }
     });
   };
@@ -110,8 +116,8 @@ class Game {
 
     // width collision
     const maxXposition = this.position.x + figure.getMaxX() + this.figure.size;
-    const widthCollision1 = position.x > 0 && maxXposition === GAME_SIZE_W;
-    const widthCollision2 = maxXposition > GAME_SIZE_W;
+    const widthCollision1 = position.x > 0 && maxXposition === GAME_SIZE_W_PX;
+    const widthCollision2 = maxXposition > GAME_SIZE_W_PX;
     if (widthCollision1 || widthCollision2) {
       isValid = false;
       skipMove = true;
@@ -119,8 +125,8 @@ class Game {
 
     // height collision
     const maxYposition = this.position.y + figure.getMaxY() + this.figure.size;
-    const heightCollision1 = position.y > 0 && maxYposition === GAME_SIZE_H;
-    const heightCollision2 = maxYposition > GAME_SIZE_H;
+    const heightCollision1 = position.y > 0 && maxYposition === GAME_SIZE_H_PX;
+    const heightCollision2 = maxYposition > GAME_SIZE_H_PX;
     if (heightCollision1 || heightCollision2) {
       isValid = false;
     }
@@ -157,11 +163,11 @@ class Game {
 
     boardElement.innerHTML = `
         <svg
-            width="${GAME_SIZE_W}"
-            height="${GAME_SIZE_H}"
+            width="${GAME_SIZE_W_PX}"
+            height="${GAME_SIZE_H_PX}"
             xmlns="http://www.w3.org/2000/svg"
         >
-            ${this.figure.render()}
+            ${this.figure.render(true)}
             ${this.figures.map((figure) => figure.render(true))}
         </svg>
       `;
@@ -214,7 +220,7 @@ class Game {
 
   addDebugDot = (x, y) => {
     document.getElementsByTagName('svg')[0].innerHTML += `
-      <g id="debug" style="fill: red" class="f1" transform="translate(${x}, ${y})">
+      <g id="debug" style="fill: red" class="f1" x=${x}, y=${y}">
         <rect width="20" height="20" x="0" y="0"></rect>  
       </g>
     `;

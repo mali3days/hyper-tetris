@@ -1,9 +1,10 @@
 import { Figure1 } from './Figure1.js';
 import { Figure2 } from './Figure2.js';
 import { Figure3 } from './Figure3.js';
+import { Figure4 } from './Figure4.js';
 import { getRandomNumber } from './utils.js';
 
-const FIGURES = [Figure1, Figure2, Figure3];
+const FIGURES = [Figure1, Figure2, Figure3, Figure4];
 
 const size = 20;
 

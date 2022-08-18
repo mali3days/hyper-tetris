@@ -23,6 +23,12 @@
     
 } */
 
+/* TODO: use or delete */
+/* rect, g {
+    transition: 0.5s;
+    transition-timing-function: cubic-bezier(0.42,0,0.58,1);
+} */
+
 .f1 rect, .f1 {
     fill: red;
 }
@@ -33,4 +39,8 @@
 
 .f3 rect, .f3 {
     fill: orange;
+}
+
+.f4 rect, .f4 {
+    fill: blue;
 }
