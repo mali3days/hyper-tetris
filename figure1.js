@@ -4,14 +4,14 @@ import { calculateElements } from './utils.js';
 
 /**
  *
- * [1, 1]
- * [0, 1]
+ * [1, 1, 1]
+ * [0, 0, 1]
  *
  */
 
 const defaultElement = [
-  [1, 1],
-  [0, 1],
+  [1, 1, 1],
+  [0, 0, 1],
 ];
 
 export class Figure1 extends Figure {
