@@ -10,6 +10,7 @@ const GAME_SIZE_H_PX = GAME_SIZE_H * STEP;
 class Game {
   figure;
   figures;
+  board;
   position;
   isGameOver;
   isPaused;
@@ -21,6 +22,7 @@ class Game {
   start = () => {
     console.log('start');
     this.figures = [];
+    this.board = [];
     this.isGameOver = false;
 
     this._resetPosition();
@@ -42,6 +44,7 @@ class Game {
     console.log('Create new figure');
     console.log(this.figure);
     this.figures.push(this.figure);
+    this.board.push(this.figure.render(true));
     this.deleteCompletedLines(this.figure);
     // TODO: Implement storing rectangles to the board canvas
     // as we need to strike a line if it is empty
