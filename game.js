@@ -22,13 +22,17 @@ class Game {
   start = () => {
     console.log('start');
     this.figures = [];
-    this.board = [];
+    this.board = this.createBoardMatrix();
     this.isGameOver = false;
 
     this._resetPosition();
     this._createGameLoop();
     this._registerEventListeners();
   };
+
+  createBoardMatrix = () => {
+    return new Array(GAME_SIZE_H).fill(new Array(GAME_SIZE_W).fill(0, 0, GAME_SIZE_W), 0, GAME_SIZE_H);
+  }
 
   update = (position) => {
     if (!this.figure) this._setFigure();
@@ -44,11 +48,8 @@ class Game {
     console.log('Create new figure');
     console.log(this.figure);
     this.figures.push(this.figure);
-    this.board.push(this.figure.render(true));
+    // this.board.push(this.figure.render(true)); // TODO: push figure coords to the matrix coords (this.board which is N * M matrix)
     this.deleteCompletedLines(this.figure);
-    // TODO: Implement storing rectangles to the board canvas
-    // as we need to strike a line if it is empty
-    // TIP: remember about border of the figure
     this._resetPosition();
     this._setFigure();
   }
@@ -64,20 +65,21 @@ class Game {
       const { position, totalSize } = figure;
 
       const completedLines = [];
-      let elemtnsInLine;
+      let elementsInLine;
       for (let i = position.y; i < position.y + totalSize.y; i += figure.size) {
-        elemtnsInLine = document.querySelectorAll(`[data-y='${i}']`);
+        elementsInLine = document.querySelectorAll(`[data-y='${i}']`);
 
-        if (elemtnsInLine.length === GAME_SIZE_W) {
+        if (elementsInLine.length === GAME_SIZE_W) {
           completedLines.push(i);
         }
       }
 
       if (completedLines.length > 0) {
+        console.log(this.board);
         // alert('DELETE ' + completedLines.join(', ') + ' LINE(S)');
         // TODO: delete completed lines
         const svgContainer = document.getElementsByTagName('svg')[0];
-        elemtnsInLine.forEach((el) => svgContainer.removeChild(el));
+        elementsInLine.forEach((el) => svgContainer.removeChild(el));
       }
     });
   };
