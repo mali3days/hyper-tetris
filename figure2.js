@@ -19,6 +19,7 @@ export class Figure2 extends Figure {
     super();
     this.size = size;
     this.position = position;
+    this.className = 'f f2';
     this.element = JSON.parse(JSON.stringify(defaultElement)); // element || defaultElement
 
     this.totalSize = {
@@ -44,6 +45,6 @@ export class Figure2 extends Figure {
   };
 
   render(noWrap) {
-    return super.render(noWrap, 'f f2');
+    return super.render(noWrap, this.className);
   }
 }

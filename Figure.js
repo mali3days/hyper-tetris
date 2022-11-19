@@ -1,3 +1,4 @@
+import { getMatrix } from './getMatrix.js';
 import { renderMatrix } from './renderMatrix.js';
 import { generateId } from './utils.js';
 
@@ -27,6 +28,18 @@ export class Figure {
     return Math.min(...this.elements.map((element) => element.x));
   }
 
+  getMatrix() {
+    return getMatrix(
+      this.element,
+      this.size,
+      {
+        x: this.position.x,
+        y: this.position.y,
+      },
+      this.className // TODO: use or delete?
+    );
+  }
+
   updateTotalSize() {
     this.totalSize = {
       x: this.size * this.element[0].length,
@@ -48,10 +61,14 @@ export class Figure {
     }
 
     return `
-    <g id="${this.id}" class="${className}" data-y=${this.position.y} transform="translate(${
-      this.position.x
-    }, ${this.position.y})">
+    <g id="${this.id}" class="${className}" data-y=${
+      this.position.y
+    } transform="translate(${this.position.x}, ${this.position.y})">
         ${renderMatrix(this.element, this.size)}
     </g>`;
+
+    // <g id="${this.id}" class="${className}" data-y=${y} x=${x} y=${y}>
+    //     ${renderMatrix(this.element, this.size)}
+    // </g>`;
   }
 }
