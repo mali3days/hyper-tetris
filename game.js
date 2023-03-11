@@ -31,8 +31,49 @@ class Game {
   };
 
   createBoardMatrix = () => {
-    return new Array(GAME_SIZE_H).fill(new Array(GAME_SIZE_W).fill(0, 0, GAME_SIZE_W), 0, GAME_SIZE_H);
-  }
+    function Matrix(w, h) {
+      var matrix = [];
+      for (var i = 0; i < h; i++) {
+        matrix[i] = [];
+        for (var j = 0; j < w; j++) {
+          matrix[i][j] = { class: 'w' };
+        }
+      }
+
+      return matrix;
+    }
+
+    return {
+      value: Matrix(GAME_SIZE_W, GAME_SIZE_H),
+      apply(blocks) {
+        blocks.forEach((block) => {
+          this.value[block.y][block.x] = {
+            x: block.x,
+            y: block.y,
+            class: block.class,
+          };
+        });
+      },
+      render() {
+        const size = 20;
+        return this.value.reduce((result, row, rowIdx) => {
+          result += row.reduce((acc, column, columnIdx) => {
+            if (!column) return acc;
+            return (acc += `
+                  <rect
+                  data-y=${size * rowIdx}
+                  width="${size}"
+                  height="${size}"
+                  x="${size * columnIdx}"
+                  y="${size * rowIdx}"
+                  class="${column.class}"
+                  />`);
+          }, '');
+          return result;
+        }, '');
+      },
+    };
+  };
 
   update = (position) => {
     if (!this.figure) this._setFigure();
@@ -48,6 +89,13 @@ class Game {
     console.log('Create new figure');
     console.log(this.figure);
     this.figures.push(this.figure);
+    // console.log(this.figure);
+    // console.log(this.figure.render);
+    // console.log(this.figure.render(true));
+    console.log(this.figure.getBlocks(true));
+    console.log(this.board.value);
+    console.log(this.board.apply(this.figure.getBlocks(true)));
+    console.log(this.board.value);
     // this.board.push(this.figure.render(true)); // TODO: push figure coords to the matrix coords (this.board which is N * M matrix)
     this.deleteCompletedLines(this.figure);
     this._resetPosition();
@@ -56,31 +104,32 @@ class Game {
 
   deleteCompletedLines = (figure) => {
     setTimeout(() => {
+      this.board.value.find
       // TODO: check if some line is finished
-      console.log('figure: ', figure);
-      console.log('figures: ', this.figures);
-      console.log('figures: ', this.size);
-      // getCTM()
+      // console.log('figure: ', figure);
+      // console.log('figures: ', this.figures);
+      // console.log('figures: ', this.size);
+      // // getCTM()
 
-      const { position, totalSize } = figure;
+      // const { position, totalSize } = figure;
 
-      const completedLines = [];
-      let elementsInLine;
-      for (let i = position.y; i < position.y + totalSize.y; i += figure.size) {
-        elementsInLine = document.querySelectorAll(`[data-y='${i}']`);
+      // const completedLines = [];
+      // let elementsInLine;
+      // for (let i = position.y; i < position.y + totalSize.y; i += figure.size) {
+      //   elementsInLine = document.querySelectorAll(`[data-y='${i}']`);
 
-        if (elementsInLine.length === GAME_SIZE_W) {
-          completedLines.push(i);
-        }
-      }
+      //   if (elementsInLine.length === GAME_SIZE_W) {
+      //     completedLines.push(i);
+      //   }
+      // }
 
-      if (completedLines.length > 0) {
-        console.log(this.board);
-        // alert('DELETE ' + completedLines.join(', ') + ' LINE(S)');
-        // TODO: delete completed lines
-        const svgContainer = document.getElementsByTagName('svg')[0];
-        elementsInLine.forEach((el) => svgContainer.removeChild(el));
-      }
+      // if (completedLines.length > 0) {
+      //   console.log(this.board);
+      //   // alert('DELETE ' + completedLines.join(', ') + ' LINE(S)');
+      //   // TODO: delete completed lines
+      //   // const svgContainer = document.getElementsByTagName('svg')[0];
+      //   // elementsInLine.forEach((el) => svgContainer.removeChild(el));
+      // }
     });
   };
 
@@ -165,7 +214,6 @@ class Game {
 
   _renderGame = () => {
     const boardElement = document.getElementById('board');
-
     boardElement.innerHTML = `
         <svg
             width="${GAME_SIZE_W_PX}"
@@ -173,9 +221,20 @@ class Game {
             xmlns="http://www.w3.org/2000/svg"
         >
             ${this.figure.render(true)}
-            ${this.figures.map((figure) => figure.render(true))}
+            ${this.board.render(true)}
         </svg>
       `;
+
+    // boardElement.innerHTML = `
+    //     <svg
+    //         width="${GAME_SIZE_W_PX}"
+    //         height="${GAME_SIZE_H_PX}"
+    //         xmlns="http://www.w3.org/2000/svg"
+    //     >
+    //         ${this.figure.render(true)}
+    //         ${this.figures.map((figure) => figure.render(true))}
+    //     </svg>
+    //   `;
   };
 
   _createGameLoop = () => {

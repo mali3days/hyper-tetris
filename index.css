@@ -29,6 +29,11 @@
     transition-timing-function: cubic-bezier(0.42,0,0.58,1);
 } */
 
+.w {
+    fill: white;
+    opacity: 0;
+}
+
 .f1 rect, .f1 {
     fill: red;
 }

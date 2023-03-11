@@ -1,4 +1,5 @@
 import { getMatrix } from './getMatrix.js';
+import { getMatrixBlocks } from './getMatrixBlocks.js';
 import { renderMatrix } from './renderMatrix.js';
 import { generateId } from './utils.js';
 
@@ -45,6 +46,13 @@ export class Figure {
       x: this.size * this.element[0].length,
       y: this.size * this.element.length,
     };
+  }
+
+  getBlocks() {
+    return getMatrixBlocks(this.element, {
+      x: this.position.x,
+      y: this.position.y,
+    }, this.className);
   }
 
   render(noWrap, className) {
