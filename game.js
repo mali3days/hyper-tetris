@@ -9,11 +9,11 @@ const GAME_SIZE_H_PX = GAME_SIZE_H * STEP;
 
 class Game {
   figure;
-  figures;
   board;
   position;
   isGameOver;
   isPaused;
+  gameRequestAnimationFrame;
 
   constructor(figureManager) {
     this.figureManager = figureManager;
@@ -21,7 +21,6 @@ class Game {
 
   start = () => {
     console.log('start');
-    this.figures = [];
     this.board = this.createBoardMatrix();
     this.isGameOver = false;
 
@@ -53,6 +52,13 @@ class Game {
             class: block.class,
           };
         });
+      },
+      removeRow(rowNumber) {
+        this.value = this.value.filter((_row, index) => index !== rowNumber);
+        this.value.unshift(Matrix(GAME_SIZE_W, GAME_SIZE_H)[0]);
+      },
+      removeRows(rows) {
+        rows.forEach(this.removeRow.bind(this));
       },
       render() {
         const size = 20;
@@ -88,7 +94,6 @@ class Game {
     console.log('STOP');
     console.log('Create new figure');
     console.log(this.figure);
-    this.figures.push(this.figure);
     // console.log(this.figure);
     // console.log(this.figure.render);
     // console.log(this.figure.render(true));
@@ -103,34 +108,13 @@ class Game {
   }
 
   deleteCompletedLines = (figure) => {
-    setTimeout(() => {
-      this.board.value.find
-      // TODO: check if some line is finished
-      // console.log('figure: ', figure);
-      // console.log('figures: ', this.figures);
-      // console.log('figures: ', this.size);
-      // // getCTM()
+      const figureBlocks = figure.getBlocks(true);
 
-      // const { position, totalSize } = figure;
+      const boardRowsToDelete = [...new Set(figureBlocks.filter((fBlock) => {
+        return this.board.value[fBlock.y].every((boardRow) => boardRow.hasOwnProperty('x'));
+      }).map(fBlock => fBlock.y))];
 
-      // const completedLines = [];
-      // let elementsInLine;
-      // for (let i = position.y; i < position.y + totalSize.y; i += figure.size) {
-      //   elementsInLine = document.querySelectorAll(`[data-y='${i}']`);
-
-      //   if (elementsInLine.length === GAME_SIZE_W) {
-      //     completedLines.push(i);
-      //   }
-      // }
-
-      // if (completedLines.length > 0) {
-      //   console.log(this.board);
-      //   // alert('DELETE ' + completedLines.join(', ') + ' LINE(S)');
-      //   // TODO: delete completed lines
-      //   // const svgContainer = document.getElementsByTagName('svg')[0];
-      //   // elementsInLine.forEach((el) => svgContainer.removeChild(el));
-      // }
-    });
+      this.board.removeRows(boardRowsToDelete)
   };
 
   _resetPosition = () => {
@@ -224,17 +208,6 @@ class Game {
             ${this.board.render(true)}
         </svg>
       `;
-
-    // boardElement.innerHTML = `
-    //     <svg
-    //         width="${GAME_SIZE_W_PX}"
-    //         height="${GAME_SIZE_H_PX}"
-    //         xmlns="http://www.w3.org/2000/svg"
-    //     >
-    //         ${this.figure.render(true)}
-    //         ${this.figures.map((figure) => figure.render(true))}
-    //     </svg>
-    //   `;
   };
 
   _createGameLoop = () => {
@@ -263,7 +236,7 @@ class Game {
         this.update({ y: STEP });
         start = timestamp;
       }
-      requestAnimationFrame(gameLoop);
+      this.gameRequestAnimationFrame = requestAnimationFrame(gameLoop);
     };
 
     requestAnimationFrame(gameLoop);
@@ -277,10 +250,16 @@ class Game {
     this.isPaused = false;
   };
 
+  restart = () => {
+    new Game(new FigureManager()).start();
+  }
+
   // TODO: use or delete
-  // kill = () => {
-  //   document.getElementById('wrapper').innerHTML = '';
-  // }
+  kill = () => {
+    document.getElementById('wrapper').innerHTML = '<div id="board"></div><div id="next-figures"></div>';
+    document.getElementById('next-figures').innerHTML = ''; // TODO: check this! Maybe not needed
+    cancelAnimationFrame(this.gameRequestAnimationFrame);
+  }
 
   addDebugDot = (x, y) => {
     document.getElementsByTagName('svg')[0].innerHTML += `
@@ -293,30 +272,20 @@ class Game {
   _elementsIntersect = (position, figureToCheck) => {
     const { x = 0, y = 0 } = position;
 
-    return this.figures.find((figure) => {
-      return figure.elements.some((element) => {
-        return figureToCheck.elements.some((figureElement) => {
-          const figureElementXWeWant =
-            figureToCheck.position.x + figureElement.x + x;
-          const figureElementYWeWant =
-            figureToCheck.position.y + figureElement.y + y;
+    return figureToCheck.elements.some((figureElement) => {
+      const boardXWeWant =
+        (figureToCheck.position.x + figureElement.x + x) / 20;
+      const boardYWeWant =
+        (figureToCheck.position.y + figureElement.y + y) / 20;
 
-          const elementXWeHave = figure.position.x + element.x;
-          const elementYWeHave = figure.position.y + element.y;
-
-          if (
-            figureElementXWeWant === elementXWeHave &&
-            figureElementYWeWant === elementYWeHave
-          ) {
-            // TODO: remove later
-            this.addDebugDot(figureElementXWeWant, figureElementYWeWant);
-
-            return true;
-          }
-
-          return false;
-        });
-      });
+      try {
+        if (this.board.value[boardYWeWant][boardXWeWant].hasOwnProperty('x')) {
+          return true;
+        }
+        return false;
+      } catch (err) {
+        return false;
+      }
     });
   };
 
@@ -333,8 +302,8 @@ class Game {
 
     restartBtnElement.addEventListener('click', () => {
       // TODO: implement restart logic
-      // this.kill();
-      // new Game().start();
+      this.kill();
+      this.restart();
     });
 
     pauseResumeBtnElement.addEventListener('click', async () => {
